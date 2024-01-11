@@ -1,5 +1,5 @@
 # DRG setting
-rawdataset/
+rawdataset/coco
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
