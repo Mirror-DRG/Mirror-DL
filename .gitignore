@@ -1,5 +1,6 @@
 # DRG setting
 rawdataset/coco
+imagecaptioning/preprocessing/*.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
