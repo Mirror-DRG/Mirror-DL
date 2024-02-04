@@ -5,9 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bcf49de3-d8a1-41cc-ae1f-0a2896f5b1f5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/imagecaptioning/preprocessing/image_captioning_coco_preprocess.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/imagecaptioning/preprocessing/image_captioning_coco_preprocess.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -71,6 +68,7 @@
       <workItem from="1705019439397" duration="3083000" />
       <workItem from="1706079946967" duration="6378000" />
       <workItem from="1706933745988" duration="387000" />
+      <workItem from="1707026185113" duration="313000" />
     </task>
     <servers />
   </component>
