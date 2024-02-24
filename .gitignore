@@ -10,6 +10,12 @@ __pycache__/
 # C extensions
 *.so
 
+# User-specific configurations
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/misc.xml
+.idea/vcs.xml
+.idea/workspace.xml
+
 # Distribution / packaging
 .Python
 build/
