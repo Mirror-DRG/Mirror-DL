@@ -61,7 +61,7 @@ val_data_type = 'val2017'
 train_csv = '../preprocessing/pro_cap_{}.csv'.format(data_type)
 train_data = pd.read_csv(train_csv)
 #train_data = train_data.loc[0:159999]
-train_data = train_data.loc[0:20000]
+#train_data = train_data.loc[0:20000]
 val_csv = '../preprocessing/pro_cap_{}.csv'.format(val_data_type)
 val_data = pd.read_csv(val_csv)
 
@@ -151,11 +151,13 @@ val_ds = ImageCaptioningDataset(val_data, data_dir, val_data_type, 70)
 training_args = Seq2SeqTrainingArguments(
     predict_with_generate=True,
     save_strategy="steps",
-    save_steps=100000,
+    save_steps=50000,
     evaluation_strategy="epoch",
     per_device_train_batch_size=4,
     per_device_eval_batch_size=4,
     output_dir="image-captioning-output",
+    fp16=True,
+    fp16_opt_level='03',
 )
 trainer = Seq2SeqTrainer(
     model = model,
