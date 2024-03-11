@@ -2,18 +2,25 @@
 from PIL import Image
 from torch.utils.data import Dataset
 import pandas as pd
-import datasets
 
 # model 관련
 import torch
-import transformers
-import accelerate
 import numpy as np
 import evaluate
 import nltk
 from transformers import VisionEncoderDecoderConfig, VisionEncoderDecoderModel, ViTConfig,\
     BertConfig, BertTokenizer, ViTImageProcessor, Seq2SeqTrainer, Seq2SeqTrainingArguments,\
     default_data_collator, pipeline
+
+import os
+import nltk
+
+os.environ["WANDB_DISABLED"] = "true"
+
+try:
+    nltk.data.find("tokenizers/punkt")
+except (LookupError, OSError):
+    nltk.download("punkt", quiet=True)
 
 # mac gpu 설정
 #device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
@@ -28,22 +35,21 @@ feature_extractor = ViTImageProcessor.from_pretrained(image_encoder_model)
 tokenizer = BertTokenizer.from_pretrained(text_decode_model)
 
 # model config 설정
-config = VisionEncoderDecoderConfig.from_encoder_decoder_configs(ViTConfig(), BertConfig())
-model.config = config
+#config = VisionEncoderDecoderConfig.from_encoder_decoder_configs(ViTConfig(), BertConfig())
+#model.config = config
 model.config.decoder_start_token_id = tokenizer.cls_token_id
+model.config.bos_token_id = tokenizer.cls_token_id
+model.config.eos_token_id = tokenizer.sep_token_id
+model.config.sep_token_id = tokenizer.sep_token_id
 model.config.pad_token_id = tokenizer.pad_token_id
+model.config.max_length = 70
+model.config.decoder.max_length = 70
 
 # model config 및
-output_dir = "vit-bert-image-captioning"
-model.save_pretrained(output_dir)
-feature_extractor.save_pretrained(output_dir)
-tokenizer.save_pretrained(output_dir)
-
-#
-output_dir = "vit-bert-image-captioning"
-model.save_pretrained(output_dir)
-feature_extractor.save_pretrained(output_dir)
-tokenizer.save_pretrained(output_dir)
+# output_dir = "vit-bert-image-captioning"
+# model.save_pretrained(output_dir)
+# feature_extractor.save_pretrained(output_dir)
+# tokenizer.save_pretrained(output_dir)
 
 # data 불러오기
 # data 경로 설정
@@ -54,6 +60,8 @@ val_data_type = 'val2017'
 # csv 파일 경로
 train_csv = '../preprocessing/pro_cap_{}.csv'.format(data_type)
 train_data = pd.read_csv(train_csv)
+#train_data = train_data.loc[0:159999]
+train_data = train_data.loc[0:20000]
 val_csv = '../preprocessing/pro_cap_{}.csv'.format(val_data_type)
 val_data = pd.read_csv(val_csv)
 
@@ -91,7 +99,6 @@ class ImageCaptioningDataset(Dataset):
         encoder_inputs = feature_extractor(images=image, return_tensor="pt")
         pixel_values_tensor = torch.tensor(encoder_inputs["pixel_values"][0])
         # pixel_values_tensor = pixel_values_tensor.unsqueeze(0)
-        print(pixel_values_tensor.shape)
 
         return pixel_values_tensor
 
@@ -137,12 +144,14 @@ def compute_metrics(eval_preds):
 
 
 # 모델 학습
-train_ds = ImageCaptioningDataset(train_data, data_dir, data_type, 70).to(device)
-val_ds = ImageCaptioningDataset(val_data, data_dir, val_data_type, 70).to(device)
+train_ds = ImageCaptioningDataset(train_data, data_dir, data_type, 70)
+val_ds = ImageCaptioningDataset(val_data, data_dir, val_data_type, 70)
 
 # 학습 인자 정의 및 모델 학습
 training_args = Seq2SeqTrainingArguments(
     predict_with_generate=True,
+    save_strategy="steps",
+    save_steps=100000,
     evaluation_strategy="epoch",
     per_device_train_batch_size=4,
     per_device_eval_batch_size=4,
