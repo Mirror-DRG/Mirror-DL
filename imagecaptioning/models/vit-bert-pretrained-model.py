@@ -16,7 +16,7 @@ from transformers import VisionEncoderDecoderConfig, VisionEncoderDecoderModel, 
     default_data_collator, pipeline
 
 # mac gpu 설정
-device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+#device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 # window & linux gpu 설정
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
@@ -28,7 +28,7 @@ feature_extractor = ViTImageProcessor.from_pretrained(image_encoder_model)
 tokenizer = BertTokenizer.from_pretrained(text_decode_model)
 
 # model config 설정
-config = VisionEncoderDecoderCongit fig.from_encoder_decoder_configs(ViTConfig(), BertConfig())
+config = VisionEncoderDecoderConfig.from_encoder_decoder_configs(ViTConfig(), BertConfig())
 model.config = config
 model.config.decoder_start_token_id = tokenizer.cls_token_id
 model.config.pad_token_id = tokenizer.pad_token_id
@@ -147,6 +147,8 @@ training_args = Seq2SeqTrainingArguments(
     per_device_train_batch_size=4,
     per_device_eval_batch_size=4,
     output_dir="./image-captioning-output",
+    fp16=True,
+    use_cpu=False,
 )
 trainer = Seq2SeqTrainer(
     model = model,

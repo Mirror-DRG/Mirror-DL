@@ -1,6 +1,9 @@
 # DRG setting
 rawdataset/coco
 imagecaptioning/preprocessing/*.csv
+imagecaptioning/models/checkpoint-100000
+imagecaptioning/models/image-captioning-test-output
+imagecaptioning/models/*.jpg
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
