@@ -58,10 +58,8 @@ data_type = 'train2017'
 val_data_type = 'val2017'
 
 # csv 파일 경로
-train_csv = '../preprocessing/pro_cap_{}.csv'.format(data_type)
+train_csv = '../preprocessing/pro_cap_small_{}.csv'.format(data_type)
 train_data = pd.read_csv(train_csv)
-#train_data = train_data.loc[0:159999]
-#train_data = train_data.loc[0:20000]
 val_csv = '../preprocessing/pro_cap_{}.csv'.format(val_data_type)
 val_data = pd.read_csv(val_csv)
 
